@@ -29,6 +29,16 @@ namespace Deploy
       {
         Display($"The local repo {gitRepoDirectoryFinal} has been built");
       }
+      else
+      {
+        Display($"The local repo {gitRepoDirectoryFinal} has not been built");
+        return;
+      }
+
+      if (DotNetPublish(gitRepoDirectoryFinal))
+      {
+        Display($"The local repo {gitRepoDirectoryFinal} has been published");
+      }
 
       Display("Press any key to exit:");
       Console.ReadKey();
@@ -125,6 +135,39 @@ namespace Deploy
           powershell.AddScript($"cd {directoryPath}");
           powershell.AddScript("dotnet restore");
           powershell.AddScript("dotnet build");
+          Collection<PSObject> results = powershell.Invoke();
+          result = true;
+        }
+      }
+      catch (Exception)
+      {
+        result = false;
+      }
+
+      return result;
+    }
+
+    private static bool DotNetPublish(string directoryPath)
+    {
+      bool result = true;
+      try
+      {
+        if (!Directory.Exists(directoryPath))
+        {
+          Directory.CreateDirectory(directoryPath);
+        }
+      }
+      catch (Exception)
+      {
+        return false;
+      }
+
+      try
+      {
+        using (PowerShell powershell = PowerShell.Create())
+        {
+          powershell.AddScript($"cd {directoryPath}");
+          powershell.AddScript("dotnet publish");
           Collection<PSObject> results = powershell.Invoke();
           result = true;
         }
