@@ -12,7 +12,7 @@ namespace Deploy
       Action<string> Display = Console.WriteLine;
       Display("Deployment of application with GIT");
       Display("cloning a repo");
-      string gitRepo = "https://github.com/fredatgithub/GitAutoUpdate";
+      string gitRepo = "https://github.com/fredatgithub/Matrix";
       string gitRepoDirectory = @"c:\temp";
       if (GitClone(gitRepoDirectory, gitRepo))
       {
