@@ -2,10 +2,10 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Deploy.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="GitRepository" Type="System.String" Scope="User">
+    <Setting Name="GitRepositoryUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)">https://github.com/fredatgithub/Matrix</Value>
     </Setting>
-    <Setting Name="gitRepositoryDirectory" Type="System.String" Scope="User">
+    <Setting Name="LocalBuildDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)">c:\temp</Value>
     </Setting>
   </Settings>

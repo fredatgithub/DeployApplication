@@ -26,24 +26,24 @@ namespace Deploy.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://github.com/fredatgithub/Matrix")]
-        public string GitRepository {
+        public string GitRepositoryUrl {
             get {
-                return ((string)(this["GitRepository"]));
+                return ((string)(this["GitRepositoryUrl"]));
             }
             set {
-                this["GitRepository"] = value;
+                this["GitRepositoryUrl"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("c:\\temp")]
-        public string gitRepositoryDirectory {
+        public string LocalBuildDirectory {
             get {
-                return ((string)(this["gitRepositoryDirectory"]));
+                return ((string)(this["LocalBuildDirectory"]));
             }
             set {
-                this["gitRepositoryDirectory"] = value;
+                this["LocalBuildDirectory"] = value;
             }
         }
     }

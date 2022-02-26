@@ -13,9 +13,9 @@ namespace Deploy
       Action<string> Display = Console.WriteLine;
       Display("Deployment of application with GIT");
       Display("cloning a repo");
-      string gitRepo = Settings.Default.GitRepository;
-      string gitRepoDirectoryInitial = Settings.Default.gitRepositoryDirectory;
-      string gitRepoDirectoryFinal = Path.Combine(Settings.Default.gitRepositoryDirectory, "matrix");
+      string gitRepo = Settings.Default.GitRepositoryUrl;
+      string gitRepoDirectoryInitial = Settings.Default.LocalBuildDirectory;
+      string gitRepoDirectoryFinal = Path.Combine(Settings.Default.LocalBuildDirectory, "matrix");
       if (GitClone(gitRepoDirectoryInitial, gitRepo))
       {
         Display($"The git repo: {gitRepo} has been cloned in the directory: {gitRepoDirectoryInitial}");
