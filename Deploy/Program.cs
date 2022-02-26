@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Management.Automation;
+using System.Reflection;
 
 namespace Deploy
 {
@@ -12,49 +13,49 @@ namespace Deploy
     static void Main(string[] arguments)
     {
       Action<string> Display = Console.WriteLine;
-      DisplayColorLetters(ConsoleColor.White, "Deployment of application with GIT");
-      Display(string.Empty);
-      DisplayColorLetters(ConsoleColor.White, "cloning a repo");
-      Display(string.Empty);
+      DisplayColorLettersWithReturn(ConsoleColor.White, $"Deployment of application with GIT {GetVersion()} created by Freddy Juhel copyright MIT");
+      Display("");
+      DisplayColorLettersWithReturn(ConsoleColor.White, "cloning a repo");
+      Display("");
       string gitRepo = Settings.Default.GitRepositoryUrl;
       string gitRepoDirectoryInitial = Settings.Default.LocalBuildDirectory;
       string gitRepoDirectoryFinal = Path.Combine(Settings.Default.LocalBuildDirectory, "matrix");
       if (GitClone(gitRepoDirectoryInitial, gitRepo))
       {
-        DisplayColorLetters(ConsoleColor.Green, $"The git repo: {gitRepo} has been cloned in the directory: {gitRepoDirectoryInitial}");
+        DisplayColorLettersWithReturn(ConsoleColor.Green, $"The git repo: {gitRepo} has been cloned in the directory: {gitRepoDirectoryInitial}");
         Display(string.Empty);
       }
       else
       {
-        DisplayColorLetters(ConsoleColor.Red, $"The git repo: {gitRepo} has not been cloned in the directory: {gitRepoDirectoryInitial}");
+        DisplayColorLettersWithReturn(ConsoleColor.Red, $"The git repo: {gitRepo} has not been cloned in the directory: {gitRepoDirectoryInitial}");
         Display(string.Empty);
         return;
       }
 
       if (DotNetBuild(gitRepoDirectoryFinal))
       {
-        DisplayColorLetters(ConsoleColor.Green, $"The local repo {gitRepoDirectoryFinal} has been built");
+        DisplayColorLettersWithReturn(ConsoleColor.Green, $"The local repo {gitRepoDirectoryFinal} has been built correctly");
         Display(string.Empty);
       }
       else
       {
-        DisplayColorLetters(ConsoleColor.Red, $"The local repo {gitRepoDirectoryFinal} has not been built");
+        DisplayColorLettersWithReturn(ConsoleColor.Red, $"The local repo {gitRepoDirectoryFinal} has not been built");
         Display(string.Empty);
         return;
       }
 
       if (DotNetPublish(gitRepoDirectoryFinal))
       {
-        DisplayColorLetters(ConsoleColor.Green, $"The local repo {gitRepoDirectoryFinal} has been published");
+        DisplayColorLettersWithReturn(ConsoleColor.Green, $"The local repo {gitRepoDirectoryFinal} has been published correctly");
         Display(string.Empty);
       }
       else
       {
-        DisplayColorLetters(ConsoleColor.Red, $"The local repo {gitRepoDirectoryFinal} has not been published");
+        DisplayColorLettersWithReturn(ConsoleColor.Red, $"The local repo {gitRepoDirectoryFinal} has not been published");
         Display(string.Empty);
       }
 
-      DisplayColorLetters(ConsoleColor.White, $"Starting Explorer.exe to access to build/publish directory");
+      DisplayColorLettersWithReturn(ConsoleColor.White, $"Starting Explorer.exe to access to build/publish directory");
       Display(string.Empty);
       StartProcess("explorer.exe", gitRepoDirectoryFinal);
       Display("Press any key to exit:");
@@ -197,7 +198,7 @@ namespace Deploy
       return result;
     }
 
-    public static void StartProcess(string dosScript, string arguments = "", bool useShellExecute = true, bool createNoWindow = false)
+    private static void StartProcess(string dosScript, string arguments = "", bool useShellExecute = true, bool createNoWindow = false)
     {
       Process task = new Process
       {
@@ -217,6 +218,19 @@ namespace Deploy
     {
       Console.ForegroundColor = color;
       Console.Write(message);
+    }
+
+    private static void DisplayColorLettersWithReturn(ConsoleColor color, string message)
+    {
+      Console.ForegroundColor = color;
+      Console.WriteLine(message);
+    }
+
+    private static string GetVersion()
+    {
+      Assembly assembly = Assembly.GetExecutingAssembly();
+      FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+      return $@"V{fvi.FileMajorPart}.{fvi.FileMinorPart}.{fvi.FileBuildPart}.{fvi.FilePrivatePart}";
     }
   }
 }
