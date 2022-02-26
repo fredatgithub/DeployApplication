@@ -13,10 +13,10 @@ namespace Deploy
     static void Main(string[] arguments)
     {
       Action<string> Display = Console.WriteLine;
-      DisplayColorLettersWithReturn(ConsoleColor.White, $"Deployment of application with GIT {GetVersion()} created by Freddy Juhel copyright MIT");
-      Display("");
+      DisplayColorLettersWithReturn(ConsoleColor.White, $"Deployment of application with GIT {GetVersion()} created by Freddy Juhel copyright MIT {DateTime.Now.Year}");
+      Display(string.Empty);
       DisplayColorLettersWithReturn(ConsoleColor.White, "cloning a repo");
-      Display("");
+      Display(string.Empty);
       string gitRepo = Settings.Default.GitRepositoryUrl;
       string gitRepoDirectoryInitial = Settings.Default.LocalBuildDirectory;
       string gitRepoDirectoryFinal = Path.Combine(Settings.Default.LocalBuildDirectory, "matrix");
@@ -62,7 +62,7 @@ namespace Deploy
       Console.ReadKey();
     }
 
-    private static bool GitInitAndGitPush(string directoryPath, string message = "commit changes")
+    private static bool GitInitAndGitPush(string directoryPath, string message = "Initial commit")
     {
       bool result = true;
       try
@@ -230,7 +230,7 @@ namespace Deploy
     {
       Assembly assembly = Assembly.GetExecutingAssembly();
       FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-      return $@"V{fvi.FileMajorPart}.{fvi.FileMinorPart}.{fvi.FileBuildPart}.{fvi.FilePrivatePart}";
+      return $"V{fvi.FileMajorPart}.{fvi.FileMinorPart}.{fvi.FileBuildPart}.{fvi.FilePrivatePart}";
     }
   }
 }
