@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Deploy.Properties;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Management.Automation;
@@ -12,9 +13,9 @@ namespace Deploy
       Action<string> Display = Console.WriteLine;
       Display("Deployment of application with GIT");
       Display("cloning a repo");
-      string gitRepo = "https://github.com/fredatgithub/Matrix";
-      string gitRepoDirectoryInitial = @"c:\temp";
-      string gitRepoDirectoryFinal = @"c:\temp\matrix";
+      string gitRepo = Settings.Default.GitRepository;
+      string gitRepoDirectoryInitial = Settings.Default.gitRepositoryDirectory;
+      string gitRepoDirectoryFinal = Path.Combine(Settings.Default.gitRepositoryDirectory, "matrix");
       if (GitClone(gitRepoDirectoryInitial, gitRepo))
       {
         Display($"The git repo: {gitRepo} has been cloned in the directory: {gitRepoDirectoryInitial}");
