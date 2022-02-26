@@ -1,6 +1,7 @@
 ﻿using Deploy.Properties;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Management.Automation;
 
@@ -11,36 +12,51 @@ namespace Deploy
     static void Main(string[] arguments)
     {
       Action<string> Display = Console.WriteLine;
-      Display("Deployment of application with GIT");
-      Display("cloning a repo");
+      DisplayColorLetters(ConsoleColor.White, "Deployment of application with GIT");
+      Display(string.Empty);
+      DisplayColorLetters(ConsoleColor.White, "cloning a repo");
+      Display(string.Empty);
       string gitRepo = Settings.Default.GitRepositoryUrl;
       string gitRepoDirectoryInitial = Settings.Default.LocalBuildDirectory;
       string gitRepoDirectoryFinal = Path.Combine(Settings.Default.LocalBuildDirectory, "matrix");
       if (GitClone(gitRepoDirectoryInitial, gitRepo))
       {
-        Display($"The git repo: {gitRepo} has been cloned in the directory: {gitRepoDirectoryInitial}");
+        DisplayColorLetters(ConsoleColor.Green, $"The git repo: {gitRepo} has been cloned in the directory: {gitRepoDirectoryInitial}");
+        Display(string.Empty);
       }
       else
       {
-        Display($"The git repo: {gitRepo} has not been cloned in the directory: {gitRepoDirectoryInitial}");
+        DisplayColorLetters(ConsoleColor.Red, $"The git repo: {gitRepo} has not been cloned in the directory: {gitRepoDirectoryInitial}");
+        Display(string.Empty);
         return;
       }
 
       if (DotNetBuild(gitRepoDirectoryFinal))
       {
-        Display($"The local repo {gitRepoDirectoryFinal} has been built");
+        DisplayColorLetters(ConsoleColor.Green, $"The local repo {gitRepoDirectoryFinal} has been built");
+        Display(string.Empty);
       }
       else
       {
-        Display($"The local repo {gitRepoDirectoryFinal} has not been built");
+        DisplayColorLetters(ConsoleColor.Red, $"The local repo {gitRepoDirectoryFinal} has not been built");
+        Display(string.Empty);
         return;
       }
 
       if (DotNetPublish(gitRepoDirectoryFinal))
       {
-        Display($"The local repo {gitRepoDirectoryFinal} has been published");
+        DisplayColorLetters(ConsoleColor.Green, $"The local repo {gitRepoDirectoryFinal} has been published");
+        Display(string.Empty);
+      }
+      else
+      {
+        DisplayColorLetters(ConsoleColor.Red, $"The local repo {gitRepoDirectoryFinal} has not been published");
+        Display(string.Empty);
       }
 
+      DisplayColorLetters(ConsoleColor.White, $"Starting Explorer.exe to access to build/publish directory");
+      Display(string.Empty);
+      StartProcess("explorer.exe", gitRepoDirectoryFinal);
       Display("Press any key to exit:");
       Console.ReadKey();
     }
@@ -179,6 +195,28 @@ namespace Deploy
       }
 
       return result;
+    }
+
+    public static void StartProcess(string dosScript, string arguments = "", bool useShellExecute = true, bool createNoWindow = false)
+    {
+      Process task = new Process
+      {
+        StartInfo =
+        {
+          UseShellExecute = useShellExecute,
+          FileName = dosScript,
+          Arguments = arguments,
+          CreateNoWindow = createNoWindow
+        }
+      };
+
+      task.Start();
+    }
+
+    private static void DisplayColorLetters(ConsoleColor color, string message)
+    {
+      Console.ForegroundColor = color;
+      Console.Write(message);
     }
   }
 }
