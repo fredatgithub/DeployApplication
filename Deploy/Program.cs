@@ -12,6 +12,12 @@ namespace Deploy
   {
     static void Main(string[] arguments)
     {
+      if (arguments.Length == 0)
+      {
+        ApplicationUsage();
+        //return; // uncomment for test and prod
+      }
+
       Action<string> Display = Console.WriteLine;
       DisplayColorLettersWithReturn(ConsoleColor.White, $"Deployment of application with GIT {GetVersion()} created by Freddy Juhel copyright MIT {DateTime.Now.Year}");
       Display(string.Empty);
@@ -60,6 +66,18 @@ namespace Deploy
       StartProcess("explorer.exe", gitRepoDirectoryFinal);
       Display("Press any key to exit:");
       Console.ReadKey();
+    }
+
+    private static void ApplicationUsage()
+    {
+      Action<string> Display = Console.WriteLine;
+      Display("How to use this application:");
+      Display(string.Empty);
+      Display("deploy.exe <environment");
+      Display("Environement can be integration, preprod, prod:");
+      Display("int");
+      Display("pprod");
+      Display("prod");
     }
 
     private static bool GitInitAndGitPush(string directoryPath, string message = "Initial commit")
